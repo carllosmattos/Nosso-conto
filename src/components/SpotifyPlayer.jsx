@@ -23,7 +23,7 @@ const SpotifyPlayer = ({ trackUrl }) => {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, delay: 0.3 }}
     >
-      <h3 className="spotify-title">🎵 Nossa Música 🎵</h3>
+      <h3 className="spotify-title">🎵 Uma música pra lembrar 2025 🎵</h3>
       <motion.div 
         className="spotify-player-wrapper"
         whileHover={{ scale: 1.02 }}

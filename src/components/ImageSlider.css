@@ -131,6 +131,6 @@
 
 @media (max-width: 480px) {
   .slider-wrapper {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 3 / 4;
   }
 }

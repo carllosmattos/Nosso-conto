@@ -37,9 +37,9 @@ const NewYearCountdown = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <h3 className="countdown-title">
-        {isPast ? '✨ Estamos em 2026! ✨' : '🎆 Contagem para 2026 🎆'}
-      </h3>
+      <h4 className="countdown-title">
+        {isPast ? '✨ Estamos em 2026! ✨' : '🎆Contagem para 2026🎆'}
+      </h4>
       <p className="countdown-subtitle">
         {isPast ? 'Tempo juntos em 2026' : 'Um ano de muitas surpresas está chegando'}
       </p>
