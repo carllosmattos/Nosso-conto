@@ -7,15 +7,46 @@ const ImageSlider = ({ images }) => {
   const [direction, setDirection] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  const [imageCache, setImageCache] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Auto-play
+  // Pré-carrega e cacheia todas as imagens
   useEffect(() => {
+    const cache = {};
+    let loadedCount = 0;
+
+    images.forEach((src, index) => {
+      const img = new Image();
+      img.onload = () => {
+        cache[src] = img;
+        loadedCount++;
+        
+        if (loadedCount === images.length) {
+          setImageCache(cache);
+          setIsLoading(false);
+        }
+      };
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          setImageCache(cache);
+          setIsLoading(false);
+        }
+      };
+      img.src = src;
+    });
+  }, [images]);
+
+  // Auto-play - só inicia quando as imagens estiverem carregadas
+  useEffect(() => {
+    if (isLoading) return;
+    
     const interval = setInterval(() => {
       nextSlide();
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, images.length]);
+  }, [currentIndex, images.length, isLoading]);
 
   const nextSlide = () => {
     setDirection(1);
@@ -67,6 +98,17 @@ const ImageSlider = ({ images }) => {
     })
   };
 
+  // Não renderiza o slider até que todas as imagens estejam carregadas
+  if (isLoading || Object.keys(imageCache).length === 0) {
+    return (
+      <div className="slider-container">
+        <div className="slider-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+          <p style={{ color: '#fff', fontSize: '1.2rem' }}>Carregando suas memórias... 💕</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <motion.div 
       className="slider-container"
@@ -80,29 +122,34 @@ const ImageSlider = ({ images }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        {/* Renderiza todas as imagens sempre no DOM */}
+        {images.map((src, index) => (
           <motion.div
-            key={currentIndex}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.3 }
-            }}
+            key={index}
             className="slider-image-container"
+            initial={false}
+            animate={{
+              opacity: index === currentIndex ? 1 : 0,
+              zIndex: index === currentIndex ? 1 : 0,
+              scale: index === currentIndex ? 1 : 0.95,
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeInOut"
+            }}
+            style={{
+              pointerEvents: index === currentIndex ? 'auto' : 'none'
+            }}
           >
             <img 
-              src={images[currentIndex]} 
-              alt={`Memória ${currentIndex + 1}`}
+              src={src} 
+              alt={`Memória ${index + 1}`}
               className="slider-image"
-              loading="lazy"
+              style={{ display: 'block' }}
             />
             <div className="slider-overlay"></div>
           </motion.div>
-        </AnimatePresence>
+        ))}
 
         {/* Botões de navegação */}
         <button className="slider-button slider-button-prev" onClick={prevSlide} aria-label="Imagem anterior">
