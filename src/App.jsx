@@ -93,7 +93,7 @@ function App() {
         transition={{ delay: 1.5 }}
       >
         <p>Feito com 💕 para celebrar nosso amor</p>
-        <p className="app-footer-year">2026 - Nosso ano especial</p>
+        <p className="app-footer-year">Que 2026 seja inesquecível!</p>
       </motion.footer>
 
       {/* Modal de configuração */}
