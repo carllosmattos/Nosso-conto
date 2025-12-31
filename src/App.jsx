@@ -42,7 +42,7 @@ function App() {
       {showFireworks && <Fireworks onComplete={handleFireworksComplete} />}
 
       {/* Botão de configuração */}
-      <motion.button
+      {/* <motion.button
         className="config-button"
         onClick={() => setIsConfigModalOpen(true)}
         whileHover={{ scale: 1.1, rotate: 90 }}
@@ -53,7 +53,7 @@ function App() {
         aria-label="Configurações"
       >
         ⚙️
-      </motion.button>
+      </motion.button> */}
 
       {/* Header */}
       <header className="app-header">
